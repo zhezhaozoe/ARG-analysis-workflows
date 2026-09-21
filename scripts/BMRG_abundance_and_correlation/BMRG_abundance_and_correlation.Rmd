@@ -1,0 +1,335 @@
+---
+title: "BMRG abundance and correlation analysis"
+---
+
+```{r}
+library(rio)
+library(tidyverse)
+library(ggplot2)
+library(ggpubr)
+library(ggthemes)
+library(forcats)
+```
+
+```{r}
+input_dir <- "../../demo_data/BMRG_abundance_and_correlation"
+output_dir <- "../../demo_run/BMRG_abundance_and_correlation"
+dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+
+reads_args <- import(file.path(input_dir, "known_ARG_abundance.tsv"))
+struct_file <- import(file.path(input_dir, "SARG_structure.tsv"))
+high_risk <- import(file.path(input_dir, "rank_I_ARGs.tsv"))
+bac_abundance <- import(file.path(input_dir, "BMRG_abundance.tsv"))
+bac_structure <- import(file.path(input_dir, "BacMet_structure.tsv"))
+
+bmrg_display_threshold <- 0.7
+```
+
+```{r}
+fg <- reads_args |>
+  inner_join(struct_file, join_by(gene == SARG.Seq.ID)) |>
+  pivot_longer(
+    cols = ends_with(".reads.qc"),
+    names_to = "sample",
+    values_to = "value"
+  ) |>
+  separate_wider_delim(
+    sample,
+    delim = "-",
+    names = c("city", "method", "dna", "pool", "month", "year"),
+    cols_remove = FALSE
+  ) |>
+  mutate(year = str_sub(year, 1, 4),
+         ngroup = str_c(city,"-", method),
+         ngroup_pool = str_c(city,"-", method, "-", pool),
+         'dna' = NULL,
+         time = str_c(year,"–", month)) |>
+  filter(Type != 'multidrug')
+
+datr1 <- fg |>
+  semi_join(high_risk, join_by(gene == Variant)) |>
+  group_by(ngroup, ngroup_pool, time) |>
+  summarise(
+    type_value = sum(value), .groups = "drop"
+  ) |>
+  group_by(ngroup, time) |>
+  summarise(
+    ave_value = mean(type_value), .groups = "drop"
+  ) |>
+  mutate(time_date = as.Date(paste0(time, "–01"), format = "%Y–%m–%d"))
+```
+
+```{r}
+# Prepare BMRG abundance data
+bac <- bac_abundance |>
+  pivot_longer(
+    cols = ends_with(".reads.qc"),
+    names_to = "sample",
+    values_to = "value"
+  ) |>
+  separate_wider_delim(
+    level1,
+    delim = "|",
+    names = c("BacMet_ID", "B2", "B3", "B4", "B5"),
+    cols_remove = FALSE,
+    too_few = "align_start"
+  ) |>
+  replace_na(list(value = 0))
+
+# Prepare BacMet annotations
+# Identify BacMet IDs associated with multiple gene annotations
+duplicated_bacmet_ids <- bac_structure |>
+  distinct(BacMet_ID, Gene_name) |>
+  count(BacMet_ID) |>
+  filter(n > 1) |>
+  pull(BacMet_ID)
+# Match IDs with multiple gene annotations by both BacMet ID and gene name
+b1 <- bac |>
+  filter(BacMet_ID %in% duplicated_bacmet_ids) |>
+  inner_join(bac_structure, join_by(BacMet_ID, B2 == Gene_name)) |>
+  mutate(Gene_name = B2) |>
+  relocate(Gene_name, .after = "value")
+# Match uniquely annotated IDs by BacMet ID
+b2 <- bac |>
+  filter(!BacMet_ID %in% duplicated_bacmet_ids) |>
+  inner_join(bac_structure, join_by(BacMet_ID))
+b3 <- rbind(b1, b2)
+```
+
+```{r}
+bg <- b3 |>
+  separate_wider_delim(
+    sample,
+    delim = "-",
+    names = c("city", "method", "dna", "pool", "month", "year"),
+    cols_remove = FALSE
+  ) |>
+  mutate(year = str_sub(year, 1, 4),
+         ngroup = str_c(city,"-", method),
+         ngroup_pool = str_c(city,"-", method, "-", pool),
+         'dna' = NULL,
+         time = str_c(year,"–", month))
+```
+
+# Total BMRG abundance
+```{r}
+my_color_industry <- c("MM-ED" = "#c38100", "MM-HC" = "darkred", "ZH-HC" = "darkred", "ZH-ED" = "#c38100")
+datc <- bg |>
+  group_by(ngroup, ngroup_pool, time) |>
+  summarise(
+    type_value = sum(value), .groups = "drop"
+  ) |>
+  group_by(ngroup, time) |>
+  summarise(
+    ave_value = mean(type_value), .groups = "drop"
+  ) |>
+  mutate(time_date = as.Date(paste0(time, "–01"), format = "%Y–%m–%d"))
+
+datm2 <- datc |>
+  filter(ngroup == "MM-ED" | ngroup == "MM-HC")
+datz2 <- datc |>
+  filter(ngroup == "ZH-ED" | ngroup == "ZH-HC")
+
+ggplot() +
+  geom_line(data = datm2, aes(x = time_date, y = ave_value, color = ngroup)) +
+  geom_point(data = datm2, aes(x = time_date, y = ave_value, color = ngroup)) +
+  geom_line(data = datz2, aes(x = time_date, y = ave_value, color = ngroup), linetype = 2) +
+  geom_point(data = datz2, aes(x = time_date, y = ave_value, color = ngroup), shape = 4) +
+  scale_x_date(date_labels = "%Y–%m", date_breaks = "1 month") +
+  scale_color_manual(values = my_color_industry) +
+  theme_few() +
+  theme(text = element_text(family = "Arial"),
+        legend.position = "none",
+        axis.text.x = element_text(size = 11, angle = 45, hjust = 1, vjust = 1)) +
+  labs(x = NULL,
+       y = "BMRGs copy number (copies/cell)")
+
+ggsave(file.path(output_dir, "BMRG_total_abundance.svg"), device = "svg", width = 17, height = 11, units = "cm")
+```
+
+# Group comparisons of BMRG abundance
+```{r}
+dat_plot <- bg |>
+  group_by(ngroup, pool, time) |>
+  summarise(type_value = sum(value), .groups = "drop") |>
+  mutate(
+    region = sub("-.*", "", ngroup),   
+    status = sub(".*-", "", ngroup)   
+  )
+my_colors <- c("A" = "#5C7A77", "O" = "#847195")
+compare_status <- list(c("ED", "HC"))
+
+ggplot(dat_plot, aes(x = status, y = type_value, color = pool)) +
+  geom_boxplot(outlier.shape = NA, size = 0.6, alpha = 0.8) +
+  geom_point(aes(color = pool), 
+             position = position_jitterdodge(jitter.width = 0.1, seed = 123), 
+             size = 1.2, alpha = 0.4) +
+  stat_compare_means(
+   aes(group = pool),
+   label = "p.signif", 
+   method = "wilcox.test",
+   label.y = max(dat_plot$type_value) * 1.05, 
+   size = 3.5,
+   vjust = -0.5,               
+   show.legend = FALSE
+  ) +
+  stat_compare_means(
+    comparisons = compare_status,
+    method = "wilcox.test",
+    label = "p.format",
+    bracket.size = 0.6,
+    label.y = max(dat_plot$type_value) * 1.2,  
+    tip.length = 0.03,
+    show.legend = FALSE
+  ) +
+  facet_wrap(~region) +
+  scale_color_manual(values = my_colors) +
+  theme_classic() +
+  theme(
+    strip.background = element_rect(fill = "gray95", color = NA), 
+    strip.text = element_text(size = 12, face = "bold"),
+    axis.text.x = element_text(size = 11, color = "black"),
+    legend.position = "right",
+    text = element_text(family = "Arial")
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.15))) +
+  labs(x = NULL, y = "BMRGs copy number (copies/cell)", color = "Tank")
+ggsave(file.path(output_dir, "BMRG_abundance_group_comparisons.svg"), device = "svg", width = 15, height = 9, units = "cm")
+```
+
+# BMRG composition
+```{r}
+colors_bac <- c(
+  "Others" = "#E0E0E0",           
+  "As" = "#4A6FA5",               
+  "Cd,Zn,Co" = "#166088",         
+  "CTM" = "#DB7F67",              
+  "Cr" = "#62929E",               
+  "Cr,CPC,DDN,2-NID" = "#544766", 
+  "Cr,Te,Se" = "#829399",         
+  "Cu" = "#B388EB",               
+  "HCl,NaOH" = "#F4A261",         
+  "Fe" = "#DDA15E",               
+  "Fe,H2O2" = "#9B2226",          
+  "Pb" = "#606C38",               
+  "Hg" = "#A8A878"                
+)
+
+ke <- bg |>
+  group_by(Compound) |>
+  summarise(type_value = sum(value), .groups = "drop") |>
+  mutate(Type_others = if_else(type_value > bmrg_display_threshold, Compound, 'Others'),
+         Type_others = str_remove_all(Type_others, "\\s*\\[.*?\\]"),
+         Type_others = str_remove_all(Type_others, "[^,()]+ \\("),
+         Type_others = str_remove_all(Type_others, "\\)"),
+         Type_others = str_replace_all(Type_others, ",\\s+", ",")) |>
+  mutate(Type_others = str_replace_all(Type_others, "2-nitroimidazole", "2-NID"),
+         Type_others = str_replace_all(Type_others, "Dodine", "DDN")) |>
+  select(Compound, Type_others)
+dato_ave2 <- bg |>
+  left_join(ke, join_by(Compound)) |>
+  group_by(time, ngroup, ngroup_pool, Type_others) |>
+  summarise(type_value = sum(value), .groups = "drop") |>
+  mutate(time_date = as.Date(paste0(time, "–01"), format = "%Y–%m–%d"),
+         year_month = format(time_date, "%Y-%m"),
+         year_month = fct_reorder(year_month, time_date)) |>
+  group_by(year_month, ngroup, Type_others) |>
+  summarize(ave_type_value = mean(type_value), .groups = "drop") |>
+  group_by(year_month, ngroup) |>
+  mutate(pct = ave_type_value / sum(ave_type_value)) |>
+  ungroup()
+dato_ave2 <- dato_ave2 |> 
+  mutate(Type_others = factor(Type_others),
+         Type_others = fct_relevel(Type_others, "Others", after = 0))
+
+ggplot(dato_ave2, aes(x = year_month, y = pct, fill = Type_others)) +
+  geom_bar(stat = "identity", position = "stack", width = 0.8) +
+  facet_wrap(~ ngroup, nrow = 1, scales = "free_x") +
+  scale_fill_manual(values = colors_bac) +
+    scale_y_continuous(
+    breaks = seq(0, 1, by = 0.25), 
+    labels = function(x) paste0(x * 100),
+    expand = expansion(mult = c(0, 0.01))
+  ) +
+  theme_few() +
+  labs(
+    x = NULL,
+    y = "Relative abundance (%)",
+    fill = "BMRG Category"
+  ) +
+    theme(
+    text = element_text(family = "Arial"),
+    axis.title = element_text(size = 15),
+    legend.title = element_text(size = 15),  
+    legend.text = element_text(size = 12),   
+    axis.text.x = element_text(size = 9, angle = 45, hjust = 1, vjust = 1),
+    strip.text = element_text(size = 15),    
+    panel.spacing.x = unit(0.2, "lines"),   
+    panel.border = element_rect(colour = "white", fill = NA, linewidth = 0.5) 
+  )
+ggsave(file.path(output_dir, "BMRG_composition.svg"), device = "svg", width = 33, height = 16, units = "cm")
+```
+
+# Correlation between BMRG and total ARG abundance
+```{r}
+dat1 <- fg |>
+  group_by(ngroup, ngroup_pool, time) |>
+  summarise(
+    type_value = sum(value), .groups = "drop"
+  ) |>
+  group_by(ngroup, time) |>
+  summarise(
+    ave_value = mean(type_value), .groups = "drop"
+  ) |>
+  mutate(time_date = as.Date(paste0(time, "–01"), format = "%Y–%m–%d"))
+dat3 <- dat1 |>
+  left_join(datc, join_by(ngroup, time, time_date)) |>
+  rename("args" = ave_value.x, "bmrgs" = ave_value.y) |>
+    separate_wider_delim(
+    ngroup,
+    delim = "-",
+    names = c("city", "method"),
+    cols_remove = FALSE
+  )
+
+ggplot(dat3, aes(x = bmrgs, y = args)) +
+  geom_point(aes(shape = city, color = method), size = 2) +
+  geom_smooth(method = "lm", se = TRUE, color = "black", fill = "gray80", alpha = 0.3, linetype = "dashed", linewidth = 0.5) + 
+  stat_cor(
+    aes(label = paste0("italic(r)~`=`~", after_stat(r), "~`,`~italic(P)~`=`~", after_stat(p))),
+    method = "pearson",
+    label.x.npc = "left",
+    label.y.npc = "top"
+  ) +
+  theme_few() +
+  scale_color_manual(values = c("ED" = "#c38100", "HC" = "darkred")) +
+  labs(x = "BMRGs copy number (copies/cell)", y = "ARGs copy number (copies/cell)", shape = "City", color = "Method")
+ggsave(file.path(output_dir, "BMRG_total_ARG_correlation.svg"), device = "svg", width = 17, height = 8, units = "cm")
+```
+
+# Correlation between BMRG and Rank I ARG abundance
+```{r}
+datr3 <- datr1 |>
+  left_join(datc, join_by(ngroup, time, time_date)) |>
+  rename("args" = ave_value.x, "bmrgs" = ave_value.y) |>
+    separate_wider_delim(
+    ngroup,
+    delim = "-",
+    names = c("city", "method"),
+    cols_remove = FALSE
+  )
+
+ggplot(datr3, aes(x = bmrgs, y = args * 1000)) +
+  geom_point(aes(shape = city, color = method), size = 2) +
+  geom_smooth(method = "lm", se = TRUE, color = "black", fill = "gray80", alpha = 0.3, linetype = "dashed", linewidth = 0.5) + 
+  stat_cor(
+    aes(label = paste0("italic(r)~`=`~", after_stat(r), "~`,`~italic(P)~`=`~", after_stat(p))),
+    method = "pearson",
+    label.x.npc = "left",
+    label.y.npc = "top"
+  ) +
+  theme_few() +
+  scale_color_manual(values = c("ED" = "#c38100", "HC" = "darkred")) +
+  labs(x = "BMRGs copy number (copies/cell)", y = "Rank I ARGs copy number\n(copies/1,000 cells)", shape = "City", color = "Method")
+ggsave(file.path(output_dir, "BMRG_rank_I_ARG_correlation.svg"), device = "svg", width = 17, height = 8, units = "cm")
+```

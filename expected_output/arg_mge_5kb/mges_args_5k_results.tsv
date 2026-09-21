@@ -1,0 +1,10 @@
+Contig	MGE_ID	MGE_Start	MGE_End	MGE_Strand	ARG_ID	ARG_Start	ARG_End	ARG_Strand	Distance
+demo_contig01	demo_contig01_1	100	402	1	demo_contig01_2	603	905	-1	201
+demo_contig02	demo_contig02_1	1000	1302	-1	demo_contig02_2	1201	1503	1	0
+demo_contig03	demo_contig03_1	2000	2302	1	demo_contig03_2	2603	2905	1	301
+demo_contig04	demo_contig04_1	4603	4905	-1	demo_contig04_2	4000	4302	-1	301
+demo_contig05	demo_contig05_1	1000	1302	1	demo_contig05_2	1503	1805	1	201
+demo_contig05	demo_contig05_1	1000	1302	1	demo_contig05_3	3003	3305	-1	1701
+demo_contig06	demo_contig06_1	7000	7302	-1	demo_contig06_2	2500	2802	1	4198
+demo_contig07	demo_contig07_1	4000	4302	1	demo_contig07_2	100	402	-1	3598
+demo_contig08	demo_contig08_1	100	402	-1	demo_contig08_2	5402	5704	1	5000

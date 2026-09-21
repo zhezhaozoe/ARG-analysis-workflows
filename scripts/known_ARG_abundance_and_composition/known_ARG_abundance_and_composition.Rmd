@@ -1,0 +1,305 @@
+---
+title: "Known ARG abundance and composition"
+---
+
+```{r}
+library(rio)
+library(tidyverse)
+library(ggplot2)
+library(ggthemes)
+library(forcats)
+library(ggpubr)
+```
+
+```{r}
+input_dir <- "../../demo_data/known_ARG_abundance_and_composition"
+output_dir <- "../../demo_run/known_ARG_abundance_and_composition"
+dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+
+reads_args <- import(file.path(input_dir, "known_ARG_abundance.tsv"))
+struct_file <- import(file.path(input_dir, "SARG_structure.tsv"))
+high_risk <- import(file.path(input_dir, "rank_I_ARGs.tsv"))
+
+arg_type_display_threshold <- 0.05
+```
+
+```{r}
+my_color_args_types_p3 <- c(
+  "aminoglycoside" = "#BE7F0E",
+  "antibacterial_fatty_acid" = "#C4A87A",
+  "bacitracin" = "#27B2D0",
+  "beta_lactam" = "#B35441",
+  "beta-lactam" = "#B35441",
+  "bleomycin" = "#7393BA",
+  "chloramphenicol" = "#6388B8",
+  "florfenicol" = "#B7C4BD",
+  "fosfomycin" = "#D0D9BF",
+  "macrolide-lincosamide-streptogramin" = "#E6BE00",
+  "MLS" = "#E6BE00",
+  "multidrug" = "#f7de98",
+  "other_peptide_antibiotics" = "#A2B4BD",
+  "polymyxin" = "#9AAB4F",
+  "quinolone" = "#92A7BF",
+  "rifamycin" = "#5B8C3A",
+  "sulfonamide" = "#3D6E94",
+  "tetracycline" = "#05AFAA",
+  "trimethoprim" = "#93C47D",
+  "vancomycin" = "#929292",
+  "others" = "#929292",
+  "novobiocin" = "#69AC96",
+  "mupirocin" = "#4A6A8A",
+  "pleuromutilin_tiamulin" = "#8CB48C",
+  "tunicamycin" = "#6FB3B8",
+  "factumycin" = "#A8C9E2",
+  "puromycin" = "#5E8C6E",
+  "bicyclomycin" = "#A0B9D1",
+  "edeine" = "#8A9FB1",
+  "streptothricin" = "#DDA541",
+  "defensin" = "#8B5A6F",
+  "MGEs" = "#7DB9B6",
+  "Mobile" = "#A6CEE3",
+  "dark_Mobile" = "#08519C",
+  "Plasmids" = "#C4D8B7",
+  "Viruses" = "#d1c2d3",
+  "Chromosomes" = "#E5E5E5",
+  "Pathogen" = "#E64B35",
+  "RankI" = "#F39B7F",
+  "High-risk" = "#F39B7F",
+  "Others" = "#E5E5E5",
+  "BAC" = "#93b5cf",
+  "metal/metalloid" = "#2F4F4F",
+  "efflux/MDR" = "#483D8B",
+  "oxidative" = "#2E8B57",
+  "organic" = "#4682B4",
+  "dyes/DNA-binding" = "#708090",
+  "membrane-active" = "#8B4513"
+)
+```
+
+# Prepare ARG abundance data
+```{r}
+fg <- reads_args |>
+  inner_join(struct_file, join_by(gene == SARG.Seq.ID)) |>
+  pivot_longer(
+    cols = ends_with(".reads.qc"),
+    names_to = "sample",
+    values_to = "value"
+  ) |>
+  separate_wider_delim(
+    sample,
+    delim = "-",
+    names = c("city", "method", "dna", "pool", "month", "year"),
+    cols_remove = FALSE
+  ) |>
+  mutate(year = str_sub(year, 1, 4),
+         ngroup = str_c(city,"-", method),
+         ngroup_pool = str_c(city,"-", method, "-", pool),
+         'dna' = NULL,
+         time = str_c(year,"–", month)) |>
+  filter(Type != 'multidrug')
+```
+
+# Total ARG abundance
+```{r}
+my_color_industry <- c("MM-ED" = "#c38100", "MM-HC" = "darkred", "ZH-HC" = "darkred", "ZH-ED" = "#c38100")
+dat1 <- fg |>
+  group_by(ngroup, ngroup_pool, time) |>
+  summarise(
+    type_value = sum(value), .groups = "drop"
+  ) |>
+  group_by(ngroup, time) |>
+  summarise(
+    ave_value = mean(type_value), .groups = "drop"
+  ) |>
+  mutate(time_date = as.Date(paste0(time, "–01"), format = "%Y–%m–%d"))
+
+datm <- dat1 |>
+  filter(ngroup == "MM-ED" | ngroup == "MM-HC")
+datz <- dat1 |>
+  filter(ngroup == "ZH-ED" | ngroup == "ZH-HC")
+
+ggplot() +
+  geom_line(data = datm, aes(x = time_date, y = ave_value, color = ngroup)) +
+  geom_point(data = datm, aes(x = time_date, y = ave_value, color = ngroup)) +
+  geom_line(data = datz, aes(x = time_date, y = ave_value, color = ngroup), linetype = 2) +
+  geom_point(data = datz, aes(x = time_date, y = ave_value, color = ngroup), shape = 4) +
+  scale_x_date(date_labels = "%Y–%m", date_breaks = "1 month") +
+  scale_color_manual(values = my_color_industry) +
+  theme_few() +
+  theme(text = element_text(family = "Arial"),
+        legend.position = "none",
+        axis.text.x = element_text(size = 11, angle = 45, hjust = 1, vjust = 1)) +
+  labs(x = NULL,
+       y = "ARGs copy number (copies/cell)")
+
+ggsave(file.path(output_dir, "known_ARG_total_abundance.svg"), device = "svg", width = 17, height = 11, units = "cm")
+
+# Mean and standard deviation
+datsm <- rbind(datm, datz)
+mean(datsm$ave_value) 
+sd(datsm$ave_value) 
+```
+
+# Rank I ARG abundance
+```{r}
+fgr <- fg |>
+  semi_join(high_risk, join_by(gene == Variant))
+datr1 <- fgr |>
+  group_by(ngroup, ngroup_pool, time) |>
+  summarise(
+    type_value = sum(value), .groups = "drop"
+  ) |>
+  group_by(ngroup, time) |>
+  summarise(
+    ave_value = mean(type_value), .groups = "drop"
+  ) |>
+  mutate(time_date = as.Date(paste0(time, "–01"), format = "%Y–%m–%d"))
+
+datmr <- datr1 |>
+  filter(ngroup == "MM-ED" | ngroup == "MM-HC")
+datzr <- datr1 |>
+  filter(ngroup == "ZH-ED" | ngroup == "ZH-HC")
+
+ggplot() +
+  geom_line(data = datmr, aes(x = time_date, y = ave_value * 1000, color = ngroup)) +
+  geom_point(data = datmr, aes(x = time_date, y = ave_value * 1000, color = ngroup)) +
+  geom_line(data = datzr, aes(x = time_date, y = ave_value * 1000, color = ngroup), linetype = 2) +
+  geom_point(data = datzr, aes(x = time_date, y = ave_value * 1000, color = ngroup), shape = 4) +
+  scale_x_date(date_labels = "%Y–%m", date_breaks = "1 month") +
+  scale_color_manual(values = my_color_industry) +
+  theme_few() +
+  theme(text = element_text(family = "Arial"),
+        legend.position = "none",
+        axis.text.x = element_text(size = 11, angle = 45, hjust = 1, vjust = 1)) +
+  labs(x = NULL,
+       y = "Rank I ARGs copy number\n(copies/1,000 cells)",
+       color = "ARG Type")
+
+# Mean and standard deviation
+datsmr <- rbind(datmr, datzr)
+mean(datsmr$ave_value) * 1000
+sd(datsmr$ave_value) * 1000
+ggsave(file.path(output_dir, "known_rank_I_ARG_abundance.svg"), device = "svg", width = 17, height = 11, units = "cm")
+```
+
+# ARG type composition
+```{r}
+ke <- fg |>
+  group_by(Type) |>
+  summarise(type_value = sum(value), .groups = "drop") |>
+  mutate(Type_others = if_else(type_value > arg_type_display_threshold, Type, 'others'),
+         Type_others = str_replace_all(Type_others, "macrolide-lincosamide-streptogramin", "MLS"),
+         Type_others = str_replace_all(Type_others, "beta_lactam", "beta-lactam")) |>
+  select(Type, Type_others)
+dato_ave <- fg |>
+  left_join(ke, join_by(Type)) |>
+  group_by(time, ngroup, ngroup_pool, Type_others) |>
+  summarise(type_value = sum(value), .groups = "drop") |>
+  mutate(time_date = as.Date(paste0(time, "–01"), format = "%Y–%m–%d"),
+         year_month = format(time_date, "%Y-%m"),
+         year_month = fct_reorder(year_month, time_date)) |>
+  group_by(year_month, ngroup, Type_others) |>
+  summarize(ave_type_value = mean(type_value), .groups = "drop") |>
+  group_by(year_month, ngroup) |>
+  mutate(pct = ave_type_value / sum(ave_type_value)) |>
+  ungroup()
+dato_ave <- dato_ave |> 
+  mutate(Type_others = fct_relevel(factor(Type_others), "others", after = 0))
+all_levels <- levels(dato_ave$Type_others)
+other_types <- all_levels[all_levels != "others"]
+
+ggplot(dato_ave, aes(x = year_month, y = pct, fill = Type_others)) +
+  geom_bar(stat = "identity", position = "stack", width = 0.8) +
+  facet_wrap(~ ngroup, nrow = 1, scales = "free_x") +
+  scale_fill_manual(values = my_color_args_types_p3,
+                    breaks = c("others", other_types)) +
+    scale_y_continuous(
+    breaks = seq(0, 1, by = 0.25), 
+    labels = function(x) paste0(x * 100),
+    expand = expansion(mult = c(0, 0.01))
+  ) +
+  theme_few() +
+  labs(
+    x = NULL,
+    y = "Relative abundance (%)",
+    fill = "ARG Type"
+  ) +
+    theme(
+    text = element_text(family = "Arial"),
+    axis.title = element_text(size = 15),
+    legend.title = element_text(size = 15), 
+    legend.text = element_text(size = 12), 
+    axis.text.x = element_text(size = 9, angle = 45, hjust = 1, vjust = 1),
+    strip.text = element_text(size = 15), 
+    panel.spacing.x = unit(0.2, "lines"), 
+    panel.border = element_rect(colour = "white", fill = NA, linewidth = 0.5) 
+  )
+
+# Mean proportion of each ARG type across all group-month observations
+dato_ave |>
+  group_by(Type_others) |>
+  summarise(mean_pct = mean(pct),
+            mean_value = mean(ave_type_value)*1000) |>
+  arrange(desc(mean_pct))
+# Mean proportion of each ARG type within each of the four process lines
+dato_ave |>
+  group_by(ngroup, Type_others) |>
+  summarise(mean = mean(pct), .groups = "drop") |>
+  arrange(desc(mean))
+ggsave(file.path(output_dir, "known_ARG_type_composition.svg"), device = "svg", width = 32, height = 14, units = "cm")
+```
+
+# Statistical comparisons of ARG abundance
+```{r}
+plot_source <- fg
+y_multiplier <- 1
+y_label <- "ARGs copy number (copies/cell)"
+
+dat_plot <- plot_source |>
+  group_by(ngroup, pool, time) |>
+  summarise(type_value = sum(value), .groups = "drop") |>
+  mutate(
+    region = sub("-.*", "", ngroup),  
+    status = sub(".*-", "", ngroup) 
+  )
+my_colors <- c("A" = "#4F6D7A", "O" = "#957186")
+compare_status <- list(c("ED", "HC"))
+
+ggplot(dat_plot, aes(x = status, y = type_value * y_multiplier, color = pool)) +
+  geom_boxplot(outlier.shape = NA, size = 0.6, alpha = 0.8) +
+  geom_point(aes(color = pool), 
+             position = position_jitterdodge(jitter.width = 0.1, seed = 123), 
+             size = 1.2, alpha = 0.4) +
+  stat_compare_means(
+   aes(group = pool),
+   label = "p.signif", 
+   method = "wilcox.test",
+   label.y = max(dat_plot$type_value * y_multiplier) * 1.05, 
+   size = 3.5,
+   vjust = -0.5,                
+   show.legend = FALSE
+  ) +
+  stat_compare_means(
+    comparisons = compare_status,
+    method = "wilcox.test",
+    label = "p.format",
+    bracket.size = 0.6,
+    label.y = max(dat_plot$type_value * y_multiplier) * 1.2, 
+    tip.length = 0.03,
+    show.legend = FALSE
+  ) +
+  
+  facet_wrap(~region) +
+  scale_color_manual(values = my_colors) +
+  theme_classic() +
+  theme(
+    strip.background = element_rect(fill = "gray95", color = NA),
+    strip.text = element_text(size = 12, face = "bold"),
+    axis.text.x = element_text(size = 11, color = "black"),
+    legend.position = "right",
+    text = element_text(family = "Arial")
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.15))) +
+  labs(x = NULL, y = y_label, color = "Tank")
+ggsave(file.path(output_dir, "known_ARG_abundance_group_comparisons.svg"), device = "svg", width = 15, height = 9, units = "cm")
+```

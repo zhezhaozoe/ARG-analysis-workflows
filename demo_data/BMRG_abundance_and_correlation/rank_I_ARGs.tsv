@@ -1,0 +1,21 @@
+Variant	Subtype	Type	Mechanism.group
+AAB20442	aminoglycoside__AAC(3)-IIe	aminoglycoside	Enzymatic inactivation
+gi|223886324|gb|ACN22617.1|	aminoglycoside__aadA	aminoglycoside	Enzymatic inactivation
+gi|53794413|gb|AAU93764.1|	aminoglycoside__aadA	aminoglycoside	Enzymatic inactivation
+gb|AAL36430.1|ARO:3004692|aadA10	aminoglycoside__aadA10	aminoglycoside	Enzymatic inactivation
+KJ363320.1.gene3.p01	aminoglycoside__aadA2	aminoglycoside	Enzymatic inactivation
+AF047479.2.gene10.p01	aminoglycoside__aadA3	aminoglycoside	Enzymatic inactivation
+NC_010558.1.6275994.p01	aminoglycoside__aadA5	aminoglycoside	Enzymatic inactivation
+AY139603.1.gene1.p01	aminoglycoside__aadA8	aminoglycoside	Enzymatic inactivation
+AF313472.2.gene15.p01	aminoglycoside__APH(3'')-Ib	aminoglycoside	Enzymatic inactivation
+CAQ86961	aminoglycoside__APH(6)-Id	aminoglycoside	Enzymatic inactivation
+gi|545272242|ref|WP_021561466.1|	aminoglycoside__APH(6)-Id	aminoglycoside	Enzymatic inactivation
+Q00983	beta_lactam__LCR-1	beta_lactam	Enzymatic inactivation
+AAK14791	beta_lactam__NPS-1	beta_lactam	Enzymatic inactivation
+gi|692128548|ref|WP_032084014.1|	macrolide-lincosamide-streptogramin__ere(A)	macrolide-lincosamide-streptogramin	Enzymatic inactivation
+gb|ABG65740.1|ARO:3002879|linG	macrolide-lincosamide-streptogramin__linG	macrolide-lincosamide-streptogramin	Enzymatic inactivation
+AAB03644	macrolide-lincosamide-streptogramin__mph(A)	macrolide-lincosamide-streptogramin	Enzymatic inactivation
+AF191564.1.gene5.p01	sulfonamide__sul1	sulfonamide	Antibiotic target replacement
+gi|1028098568|ref|WP_063855066.1|	sulfonamide__sul1	sulfonamide	Antibiotic target replacement
+gi|691356724|ref|WP_032072921.1|	sulfonamide__sul1	sulfonamide	Antibiotic target replacement
+AY232670.1.gene2.p01	tetracycline__tet(G)	tetracycline	Efflux pump

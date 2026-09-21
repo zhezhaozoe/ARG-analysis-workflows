@@ -1,0 +1,103 @@
+Tag	SARG.Seq.ID	Type	Subtype	HMM.category	Mechanism.group	Mechanism.subgroup	Mechanism.subgroup2	SARG3.0_F	SARG3.0_L	SARG3.0_S
+	gi|639206639|ref|WP_024544906.1|	aminoglycoside	aminoglycoside__AAC(3)-Id	AAC(3)-Id	Enzymatic inactivation	Acetyltransferases	AAC(3)	Yes	Yes	Yes
+	AAB20442	aminoglycoside	aminoglycoside__AAC(3)-IIe	AAC(3)-II	Enzymatic inactivation	Acetyltransferases	AAC(3)	Yes	Yes	Yes
+	gi|223886324|gb|ACN22617.1|	aminoglycoside	aminoglycoside__aadA	aadA-ANT(3'')-IIa	Enzymatic inactivation	Nucleotidyltransferases (Adenylyltransferases)	ANT(3'')	Yes	Yes	Yes
+	gi|305670809|gb|ADM62671.1|	aminoglycoside	aminoglycoside__aadA	aadA-ANT(3'')-IIa	Enzymatic inactivation	Nucleotidyltransferases (Adenylyltransferases)	ANT(3'')	Yes	Yes	Yes
+	gi|53794413|gb|AAU93764.1|	aminoglycoside	aminoglycoside__aadA	aadA-ANT(3'')-IIa	Enzymatic inactivation	Nucleotidyltransferases (Adenylyltransferases)	ANT(3'')	Yes	Yes	Yes
+	YP_002894485	aminoglycoside	aminoglycoside__aadA	aadA-ANT(3'')-IIa	Enzymatic inactivation	Nucleotidyltransferases (Adenylyltransferases)	ANT(3'')	Yes	Yes	Yes
+	gb|AAL36430.1|ARO:3004692|aadA10	aminoglycoside	aminoglycoside__aadA10	aadA10	Enzymatic inactivation	Nucleotidyltransferases (Adenylyltransferases)	ANT(3'')	Yes	Yes	Yes
+	KJ363320.1.gene3.p01	aminoglycoside	aminoglycoside__aadA2	aadA2	Enzymatic inactivation	Nucleotidyltransferases (Adenylyltransferases)	ANT(3'')	Yes	Yes	Yes
+	AF047479.2.gene10.p01	aminoglycoside	aminoglycoside__aadA3	aadA3	Enzymatic inactivation	Nucleotidyltransferases (Adenylyltransferases)	ANT(3'')	Yes	Yes	Yes
+	NC_010558.1.6275994.p01	aminoglycoside	aminoglycoside__aadA5	aadA5	Enzymatic inactivation	Nucleotidyltransferases (Adenylyltransferases)	ANT(3'')	Yes	Yes	Yes
+	AY139603.1.gene1.p01	aminoglycoside	aminoglycoside__aadA8	aadA8	Enzymatic inactivation	Nucleotidyltransferases (Adenylyltransferases)	ANT(3'')	Yes	Yes	Yes
+	AF313472.2.gene15.p01	aminoglycoside	aminoglycoside__APH(3'')-Ib	APH(3'')-Ib	Enzymatic inactivation	Phosphotransferases	APH(3'')	Yes	Yes	Yes
+	BAE98117	aminoglycoside	aminoglycoside__APH(3')-IIIa	APH(3')-IIIa	Enzymatic inactivation	Phosphotransferases	APH(3')	Yes	Yes	Yes
+	CAQ86961	aminoglycoside	aminoglycoside__APH(6)-Id	APH(6)-Id	Enzymatic inactivation	Phosphotransferases	APH(6)	Yes	Yes	Yes
+	gi|545272242|ref|WP_021561466.1|	aminoglycoside	aminoglycoside__APH(6)-Id	APH(6)-Id	Enzymatic inactivation	Phosphotransferases	APH(6)	Yes	Yes	Yes
+two-component system	gb|AAF40763.1|ARO:3003961|farA	antibacterial_fatty_acid	antibacterial_fatty_acid__farA	farA	Efflux pump			Yes	Yes	Yes
+	ABM94007	bacitracin	bacitracin__bacA	bacA	Antibiotic target alteration	undecaprenyl pyrophosphate		Yes	Yes	Yes
+	YP_001563294	bacitracin	bacitracin__bacA	bacA	Antibiotic target alteration	undecaprenyl pyrophosphate		Yes	Yes	Yes
+	YP_002890644	bacitracin	bacitracin__bacA	bacA	Antibiotic target alteration	undecaprenyl pyrophosphate		Yes	Yes	Yes
+	YP_981592	bacitracin	bacitracin__bacA	bacA	Antibiotic target alteration	undecaprenyl pyrophosphate		Yes	Yes	Yes
+	ZP_03552050	bacitracin	bacitracin__bacA	bacA	Antibiotic target alteration	undecaprenyl pyrophosphate		Yes	Yes	Yes
+	gi|970317850|ref|WP_058685394.1|	beta_lactam	beta_lactam__VIM-1	VIM	Enzymatic inactivation	Class B1 beta-lactamase		Yes	Yes	Yes
+	AJ250876.1.gene1.p01	beta_lactam	beta_lactam__THIN-B beta-lactamase	THIN-B beta-lactamase	Enzymatic inactivation	Class B3 beta-lactamase		Yes	Yes	Yes
+	Q00983	beta_lactam	beta_lactam__LCR-1	LCR-1	Enzymatic inactivation	Class D beta-lactamase		Yes	Yes	Yes
+	AAK14791	beta_lactam	beta_lactam__NPS-1	NPS-1	Enzymatic inactivation	Class D beta-lactamase		Yes	Yes	Yes
+	gi|157139469|gb|ABV24340.1|	beta_lactam	beta_lactam__OXA-2	OXA	Enzymatic inactivation	Class D beta-lactamase		Yes	Yes	Yes
+	gb|ALV80601.1|ARO:3003801|bcr-1	bicyclomycin	bicyclomycin__bcr-1	bcr-1	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	gb|AGH88989.1|ARO:3001205|determinant	bleomycin	bleomycin__bleomycin resistance protein	bleomycin resistance protein	Enzymatic inactivation			Yes	Yes	Yes
+	M58472.1.gene1.p01	chloramphenicol	chloramphenicol__Agrobacterium fabrum chloramphenicol acetyltransferase	Agrobacterium fabrum chloramphenicol acetyltransferase	Enzymatic inactivation	cat		Yes	Yes	Yes
+	ACA48664	chloramphenicol	chloramphenicol__catB3	catB3	Enzymatic inactivation	cat		Yes	Yes	Yes
+	AAS89471	chloramphenicol	chloramphenicol__catB8	catB8	Enzymatic inactivation	cat		Yes	Yes	Yes
+	ABD04054	chloramphenicol	chloramphenicol__catB8	catB8	Enzymatic inactivation	cat		Yes	Yes	Yes
+	CAI43343	chloramphenicol	chloramphenicol__cmlA4	cmlA	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	AF332662.1.gene1.p01	florfenicol	florfenicol__floR	floR	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	AJ251806.1.gene1.p01	florfenicol	florfenicol__floR	floR	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	gi|446136270|ref|WP_000214125.1|	florfenicol	florfenicol__floR	floR	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	gi|695688999|ref|WP_032634100.1|	florfenicol	florfenicol__floR	floR	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	gi|730661043|ref|WP_034065992.1|	florfenicol	florfenicol__floR	floR	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	gb|ABO11759.2|ARO:3004573|Acinetobacter	fosfomycin	fosfomycin__Acinetobacter baumannii AbaF	Acinetobacter baumannii AbaF	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	gb|AJE60855.1|ARO:3003209|FosA5	fosfomycin	fosfomycin__FosA5	FosA family	Enzymatic inactivation	thiol transferase		Yes	Yes	Yes
+	gi|983302207|ref|WP_060488517.1|	fosfomycin	fosfomycin__FosB	FosB family	Enzymatic inactivation	thiol transferase		Yes	Yes	Yes
+	Q8Y6I2	fosfomycin	fosfomycin__FosX	FosX	Enzymatic inactivation	thiol transferase		Yes	Yes	Yes
+	gb|ABG65740.1|ARO:3002879|linG	macrolide-lincosamide-streptogramin	macrolide-lincosamide-streptogramin__linG	linG	Enzymatic inactivation	lincosamide nucleotidyltransferase (LNU)	MLS_lincosamide	Yes	Yes	Yes
+	AGC41079.1	macrolide-lincosamide-streptogramin	macrolide-lincosamide-streptogramin__lnu(H)	lnu(H)	Enzymatic inactivation	lincosamide nucleotidyltransferase (LNU)	MLS_lincosamide	Yes	Yes	Yes
+	gi|692128548|ref|WP_032084014.1|	macrolide-lincosamide-streptogramin	macrolide-lincosamide-streptogramin__ere(A)	ere(A)	Enzymatic inactivation	macrolide esterase	MLS_macrolide	Yes	Yes	Yes
+multicomponent system	NC_008702.1.4609191.p01	macrolide-lincosamide-streptogramin	macrolide-lincosamide-streptogramin__macA	macA	Efflux pump	ABC family antibiotic efflux pump		Yes	Yes	Yes
+multicomponent system	gi|446110340|ref|WP_000188195.1|	macrolide-lincosamide-streptogramin	macrolide-lincosamide-streptogramin__macB	macB	Efflux pump	ABC family antibiotic efflux pump		Yes	Yes	Yes
+multicomponent system	gi|485890120|ref|WP_001482667.1|	macrolide-lincosamide-streptogramin	macrolide-lincosamide-streptogramin__macB	macB	Efflux pump	ABC family antibiotic efflux pump		Yes	Yes	Yes
+multicomponent system	gi|766961649|ref|WP_044860626.1|	macrolide-lincosamide-streptogramin	macrolide-lincosamide-streptogramin__macB	macB	Efflux pump	ABC family antibiotic efflux pump		Yes	Yes	Yes
+	AAB03644	macrolide-lincosamide-streptogramin	macrolide-lincosamide-streptogramin__mph(A)	mph(A)	Enzymatic inactivation	phosphorylases	MLS_macrolide	Yes	Yes	Yes
+two-component system	gi|740410309|ref|WP_038243756.1|	polymyxin	polymyxin__rosB	rosB	Efflux pump			Yes	Yes	Yes
+two-component system	YP_001477377	polymyxin	polymyxin__rosB	rosB	Efflux pump			Yes	Yes	Yes
+two-component system	ZP_04615639	polymyxin	polymyxin__rosB	rosB	Efflux pump			Yes	Yes	Yes
+	gb|ADP36409.1|ARO:3003730|Bifidobacteria	mupirocin	mupirocin__Bifidobacteria intrinsic ileS conferring resistance to mupirocin	Bifidobacteria intrinsic ileS conferring resistance to mupirocin	Antibiotic target alteration			Yes	Yes	Yes
+	gb|CAA53189|ARO:3000521|mupA	mupirocin	mupirocin__mupA	mupA	Antibiotic target alteration			Yes	Yes	Yes
+	gb|AEY83581|ARO:3000510|mupB	mupirocin	mupirocin__mupB	mupB	Antibiotic target alteration			Yes	Yes	Yes
+	gi|1033217078|gb|OAR27197.1|	novobiocin	novobiocin__novA	novA	Efflux pump	ABC family antibiotic efflux pump		Yes	Yes	Yes
+	gi|493394434|ref|WP_006350564.1|	novobiocin	novobiocin__novA	novA	Efflux pump	ABC family antibiotic efflux pump		Yes	Yes	Yes
+	gi|943909899|ref|WP_055545300.1|	novobiocin	novobiocin__novA	novA	Efflux pump	ABC family antibiotic efflux pump		Yes	Yes	Yes
+	gi|944009777|ref|WP_055601444.1|	novobiocin	novobiocin__novA	novA	Efflux pump	ABC family antibiotic efflux pump		Yes	Yes	Yes
+	gi|944470764|ref|WP_055701183.1|	novobiocin	novobiocin__novA	novA	Efflux pump	ABC family antibiotic efflux pump		Yes	Yes	Yes
+	gb|AAC75271.1|ARO:3003952|yojI	other_peptide_antibiotics	other_peptide_antibiotics__microcin efflux pumu gene yojI	microcin efflux pumu gene yojI	Efflux pump	ABC family antibiotic efflux pump		Yes	Yes	Yes
+	gb|APB03219.1|ARO:3003986|TaeA	pleuromutilin_tiamulin	pleuromutilin_tiamulin__TaeA	TaeA	Efflux pump	ABC family antibiotic efflux pump		Yes	Yes	Yes
+	gb|AVM85875.1|ARO:3004698|MCR-5.2	polymyxin	polymyxin__mcr-5.2	mcr-5	Antibiotic target alteration			Yes	Yes	Yes
+	gb|AAC75089.1|ARO:3003577|ugd	polymyxin	polymyxin__ugd	ugd	Antibiotic target alteration			Yes	Yes	Yes
+	P13249	puromycin	puromycin__puromycin resistance protein	puromycin resistance protein	Enzymatic inactivation			Yes	Yes	Yes
+	gb|AEZ36150.1|ARO:3000448|qepA	quinolone	quinolone__qepA	qepA	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	gi|1028098233|ref|WP_063854778.1|	quinolone	quinolone__qepA	qepA	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	gi|1039291348|ref|WP_064768701.1|	quinolone	quinolone__qepA	qepA	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	NC_010558.1.6275948.p01	quinolone	quinolone__qepA	qepA	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	gi|1039004533|ref|WP_064760451.1|	quinolone	quinolone__QepA4	QepA4	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	AF001493.1.orf0.gene.p01	rifamycin	rifamycin__arr-1	arr family	Enzymatic inactivation	rifampin ADP-ribosyltransferase (Arr)		Yes	Yes	Yes
+	FM897214.1.orf2.gene.p01	rifamycin	rifamycin__arr-3	arr family	Enzymatic inactivation	rifampin ADP-ribosyltransferase (Arr)		Yes	Yes	Yes
+	gb|ABV26705.1|ARO:3002849|arr-4	rifamycin	rifamycin__arr-4	arr family	Enzymatic inactivation	rifampin ADP-ribosyltransferase (Arr)		Yes	Yes	Yes
+	gb|ADV91011.1|ARO:3000245|RbpA	rifamycin	rifamycin__RbpA	RbpA	Antibiotic target protection			Yes	Yes	Yes
+	gb|APB03222.1|ARO:3003992|rphB	rifamycin	rifamycin__rphB	rphB	Enzymatic inactivation			Yes	Yes	Yes
+	AF191564.1.gene5.p01	sulfonamide	sulfonamide__sul1	sul1	Antibiotic target replacement	dihydropteroate synthase		Yes	Yes	Yes
+	AY162283.2.gene7.p01	sulfonamide	sulfonamide__sul1	sul1	Antibiotic target replacement	dihydropteroate synthase		Yes	Yes	Yes
+	AY339985.2.gene4.p01	sulfonamide	sulfonamide__sul1	sul1	Antibiotic target replacement	dihydropteroate synthase		Yes	Yes	Yes
+	EU675686.2.gene7.p01	sulfonamide	sulfonamide__sul1	sul1	Antibiotic target replacement	dihydropteroate synthase		Yes	Yes	Yes
+	gi|1028098568|ref|WP_063855066.1|	sulfonamide	sulfonamide__sul1	sul1	Antibiotic target replacement	dihydropteroate synthase		Yes	Yes	Yes
+	gi|691356724|ref|WP_032072921.1|	sulfonamide	sulfonamide__sul1	sul1	Antibiotic target replacement	dihydropteroate synthase		Yes	Yes	Yes
+	gi|499772318|ref|WP_011453052.1|	sulfonamide	sulfonamide__sul2	sul2	Antibiotic target replacement	dihydropteroate synthase		Yes	Yes	Yes
+	AUI09862.1	sulfonamide	sulfonamide__sul4	sul4	Antibiotic target replacement	dihydropteroate synthase		Yes	Yes	Yes
+	AF353562.gene.p01	tetracycline	tetracycline__tet(35)	tet(35)	Efflux pump	ABC family antibiotic efflux pump		Yes	Yes	Yes
+	AF133140.gene.p01	tetracycline	tetracycline__tet(G)	tet(G)	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	AY232670.1.gene2.p01	tetracycline	tetracycline__tet(G)	tet(G)	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	AF030344.gene.p01	tetracycline	tetracycline__tet(V)	tet(V)	Efflux pump	MFS family antibiotic efflux pump		Yes	Yes	Yes
+	gb|AKQ05893.1|ARO:3004582|tet(49)	tetracycline	tetracycline__tet(49)	tet(49)	Antibiotic target protection			Yes	Yes	Yes
+	gb|ARB93503.1|ARO:3004603|tet(56)	tetracycline	tetracycline__tet(56)	tet(56)	Antibiotic target protection			Yes	Yes	Yes
+	gb|AAA25550.1|ARO:3003105|dfrA3	trimethoprim	trimethoprim__dfrA3	dfrA3	Antibiotic target replacement	dihydrofolate reductase		Yes	Yes	Yes
+	P00384	trimethoprim	trimethoprim__dfrB2	dfrB2	Antibiotic target replacement	dihydrofolate reductase		Yes	Yes	Yes
+	AAM89276	trimethoprim	trimethoprim__dfrB3	dfrB3	Antibiotic target replacement	dihydrofolate reductase		Yes	Yes	Yes
+	ABB72057	trimethoprim	trimethoprim__dfrB6	dfrB6	Antibiotic target replacement	dihydrofolate reductase		Yes	Yes	Yes
+	gb|KTE89608.1|ARO:3003723|vanI	vancomycin	vancomycin__vanI	vanI	Antibiotic target alteration	van ligase	D-Ala-D-Lac ligase	Yes	Yes	Yes
+	YP_002333394	vancomycin	vancomycin__vanHB	vanHB	Antibiotic target alteration	vanH family		Yes	Yes	Yes
+	KF478993.1.gene2.p01	vancomycin	vancomycin__vanHO	vanHO	Antibiotic target alteration	vanH family		Yes	Yes	Yes
+	gi|748291568|ref|WP_039833226.1|	vancomycin	vancomycin__vanXF	vanXF	Antibiotic target alteration	vanX family		Yes	Yes	Yes
+	gi|522156438|ref|WP_020667646.1|	vancomycin	vancomycin__vanXO	vanXO	Antibiotic target alteration	vanX family		Yes	Yes	Yes
+	gb|QEQ43476.1|ARO:3005061|AAC(3)-IVb	aminoglycoside	aminoglycoside__AAC(3)-IVb	AAC(3)-IV	Enzymatic inactivation		AAC(3)			
+	gb|CDO12042.1|ARO:3005053|ArnT	other_peptide_antibiotics	other_peptide_antibiotics__ArnT							
+	gb|WP_071846200.1|ARO:3005350|DfrB9	trimethoprim	trimethoprim__DfrB9							
